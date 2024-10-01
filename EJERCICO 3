@@ -1,0 +1,57 @@
+CLASE EXCEPCION 
+import java.util.InputMismatchException;
+
+public class RangoInvalidoException extends Exception {
+
+    public RangoInvalidoException() {
+    }
+
+    public RangoInvalidoException(String s) {
+        super(s);
+    }
+}
+
+MAIN
+import java.util.InputMismatchException;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.UUID;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int numeroRandom = (int) (Math.random() * 500) + 1; // rango entre 1 y 500
+        System.out.println(numeroRandom);
+        int numeroIngresado = 0;
+        int contadorIntentos = 1;
+
+        while (numeroIngresado != numeroRandom) {
+            try {
+                System.out.println("Intente adivinar el numero seleccionado por la computadora entre 1 y 500");
+                numeroIngresado = scanner.nextInt();
+                scanner.nextLine();
+
+                if (numeroIngresado < 1 || numeroIngresado > 500) {
+                    throw new RangoInvalidoException();
+                }
+                if (numeroIngresado != numeroRandom) {
+                    if (numeroIngresado < numeroRandom) {
+                        System.out.println("EL NUMERO INGRESADO ES MENOR AL SELECCIONADO POR LA COMPUTADORA");
+                    } else if (numeroIngresado > numeroRandom) {
+                        System.out.println("EL NUMERO INGRESADO ES MAYOR AL SELECCIONADO POR LA COMPUTADORA");
+                    }
+                } else {
+                    System.out.println("ACERTASTE! TE TOMO " + contadorIntentos + " INTENTOS");
+                }
+
+            } catch (InputMismatchException x){
+                System.out.println("El caracter ingresado no fue un numero");
+                scanner.nextLine();
+            } catch (RangoInvalidoException s) {
+                System.out.println("EL NUMERO INGRESADO ESTA FUERA DEL RANGO");
+
+            }
+            contadorIntentos++;
+        }
+   
