@@ -1,0 +1,121 @@
+CLASE ALUMNOS 
+import java.util.Objects;
+
+public class Alumnos {
+    String nombre;
+    String nacionalidad;
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getNacionalidad() {
+        return nacionalidad;
+    }
+
+    public void setNacionalidad(String nacionalidad) {
+        this.nacionalidad = nacionalidad;
+    }
+
+    public Alumnos(String nombre, String nacionalidad) {
+        this.nombre = nombre;
+        this.nacionalidad = nacionalidad;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Alumnos alumnos = (Alumnos) o;
+        return Objects.equals(nacionalidad, alumnos.nacionalidad);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nacionalidad);
+    }
+
+    @Override
+    public String toString() {
+        return "Alumnos{" +
+                "nombre='" + nombre + '\'' +
+                ", nacionalidad='" + nacionalidad + '\'' +
+                '}';
+    }
+}
+
+CLASE COLEGIO
+import java.util.ArrayList;
+import java.util.HashSet;
+
+public class Colegio extends Alumnos {
+    ArrayList<Alumnos> listado = new ArrayList<>();
+
+
+    public Colegio(String nombre, String nacionalidad) {
+        super(nombre, nacionalidad);
+    }
+
+    public void agregarAlumnos (Alumnos a){
+        listado.add(a);
+    }
+
+    public String verNacionalidades (String nacionalidad){
+        int contador = 0;
+        for (int i = 0; i < listado.size(); i++) {
+            if (listado.get(i).getNacionalidad().equals(nacionalidad)){
+                contador++;
+            }
+        }
+        return "Hay " + contador + " alumnos con la nacionalidad " + nacionalidad;
+    }
+
+    public String cuantos(){
+        HashSet nacionalidades = new HashSet<>();
+        //creamos el hash set y metemos el contenido del listado, y ya que el hashset
+        // no admite duplicados, simplemente retornamos el tamaño
+        nacionalidades.addAll(listado);
+        int cantidad = nacionalidades.size();
+        return "HAY " + cantidad + " NACIONALIDADES DISTINTAS";
+    }
+
+    public void borrar(Alumnos a){
+        for (int i = 0; i < listado.size(); i++) {
+            if (listado.contains(a)){
+                listado.remove(a);
+            }
+        }
+    }
+    public void verTodos (){
+        for (Alumnos a: listado) {
+            System.out.println("Nombre: " + a.getNombre() + "\' Nacionalidad: " + a.getNacionalidad());
+        }
+    }
+
+}
+MAIN
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+ArrayList<Alumnos> estudiantes = new ArrayList<>();
+        Alumnos a1 = new Alumnos("fede", "arg");
+        Alumnos a2 = new Alumnos("lu", "br");
+        Alumnos a3 = new Alumnos("fff", "arg");
+        Colegio cole = new Colegio("utn", "argentina");
+
+        cole.agregarAlumnos(a1);
+        cole.agregarAlumnos(a2);
+        cole.agregarAlumnos(a3);
+
+        System.out.println(cole.cuantos());
+
+
+
+
+    }
+}
