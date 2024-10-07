@@ -51,19 +51,24 @@ public class Alumnos {
 CLASE COLEGIO
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 
 public class Colegio extends Alumnos {
     ArrayList<Alumnos> listado = new ArrayList<>();
-
-
     public Colegio(String nombre, String nacionalidad) {
         super(nombre, nacionalidad);
     }
-
     public void agregarAlumnos (Alumnos a){
-        listado.add(a);
+       try {
+           if(a.nacionalidad == null){
+               throw new NacionalidadException("La nacionalidad es null");
+           } else {
+               listado.add(a);
+           }
+       } catch (NacionalidadException e){
+           System.out.println(e.getMessage());
+       }
     }
-
     public String verNacionalidades (String nacionalidad){
         int contador = 0;
         for (int i = 0; i < listado.size(); i++) {
@@ -73,7 +78,6 @@ public class Colegio extends Alumnos {
         }
         return "Hay " + contador + " alumnos con la nacionalidad " + nacionalidad;
     }
-
     public String cuantos(){
         HashSet nacionalidades = new HashSet<>();
         //creamos el hash set y metemos el contenido del listado, y ya que el hashset
@@ -82,20 +86,25 @@ public class Colegio extends Alumnos {
         int cantidad = nacionalidades.size();
         return "HAY " + cantidad + " NACIONALIDADES DISTINTAS";
     }
-
-    public void borrar(Alumnos a){
-        for (int i = 0; i < listado.size(); i++) {
-            if (listado.contains(a)){
-                listado.remove(a);
+    public void borrar(Alumnos a) {
+        try {
+            for (int i = 0; i < listado.size(); i++) {
+                if (!listado.contains(a)) {
+                    throw new NoSuchElementException("El alumno " + a + "no fue encontrado");
+                } else {
+                    listado.remove(a);
+                }
             }
+        } catch(NoSuchElementException n){
+            System.out.println(n.getMessage());
         }
     }
+
     public void verTodos (){
         for (Alumnos a: listado) {
             System.out.println("Nombre: " + a.getNombre() + "\' Nacionalidad: " + a.getNacionalidad());
         }
     }
-
 }
 MAIN
 import java.util.*;
@@ -103,7 +112,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
 ArrayList<Alumnos> estudiantes = new ArrayList<>();
-        Alumnos a1 = new Alumnos("fede", "arg");
+        Alumnos a1 = new Alumnos("fede", "null");
         Alumnos a2 = new Alumnos("lu", "br");
         Alumnos a3 = new Alumnos("fff", "arg");
         Colegio cole = new Colegio("utn", "argentina");
@@ -111,7 +120,7 @@ ArrayList<Alumnos> estudiantes = new ArrayList<>();
         cole.agregarAlumnos(a1);
         cole.agregarAlumnos(a2);
         cole.agregarAlumnos(a3);
-
+        cole.borrar(a2);
         System.out.println(cole.cuantos());
 
 
